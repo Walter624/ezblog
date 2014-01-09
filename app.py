@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
 import pymongo
-import git
 
 app = Flask(__name__)
 
@@ -31,10 +30,6 @@ def process_create_post():
     db = mongo_client.ezblog
     db.posts.save({'title': request.form['title'], 'content': request.form['content']})
     return redirect(url_for('default'))
-
-    repo = Repo.init("/usr/", bare=True)
-    assert repo.bare == True
-    repo.commit()
 
 if __name__ == '__main__':
     app.run(debug=True)
