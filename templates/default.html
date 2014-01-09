@@ -6,7 +6,8 @@
 <body>
     {% for post in posts %}
       <div>
-            {{post.content}}
+            <a href="/post/{{post['_id']}}">{{post['title']}}</a>
+            {{post['content']}}
       </div>
 
     {% endfor %}

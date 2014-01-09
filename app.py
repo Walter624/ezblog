@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import pymongo
+from bson.objectid import ObjectId
 
 app = Flask(__name__)
 
@@ -12,7 +13,7 @@ def default():
 
 @app.route('/post/create')
 def create_post():
-    return render_template('create_post.html')
+    return render_template('create_post.html', action='/post/process-create-post', title='Create Post')
 
 @app.route('/post/process-create-post', methods=['POST'])
 def process_create_post():
@@ -30,6 +31,13 @@ def process_create_post():
     db = mongo_client.ezblog
     db.posts.save({'title': request.form['title'], 'content': request.form['content']})
     return redirect(url_for('default'))
+
+@app.route('/post/edit/<post_id>')
+def edit_post(post_id):
+    mongo_client = pymongo.MongoClient("localhost", 27017)
+    db = mongo_client.ezblog
+    post = db.posts.find_one({'_id':ObjectId(post_id)})
+    return render_template('create_post.html', post=post, action='/post/process-edit-post', title='Edit Post')
 
 if __name__ == '__main__':
     app.run(debug=True)
