@@ -7,7 +7,7 @@
 
     <form action="{{action}}" method="post">
         {% if post is defined %}
-            <input type="hidden" value="{{post['_id']}}" />
+            <input type="hidden" name="_id" value="{{post['_id']}}" />
         {% endif %}
         <div>
             <label for="title">Title:</label>
@@ -28,6 +28,12 @@
         <div>
             <button type="submit">Submit</button>
         </div>
+
+        {% if post is defined %}
+            <div>
+                <button type="submit" formaction="/post/process-delete-post">Delete</button>
+            </div>
+        {% endif %}
 
     </form>
 </body>
