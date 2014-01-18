@@ -45,7 +45,24 @@ def edit_post(post_id):
     mongo_client = pymongo.MongoClient("localhost", 27017)
     db = mongo_client.ezblog
     post = db.posts.find_one({'_id': ObjectId(post_id)})
-    return render_template('post_template.html', post=post, action='/post/process-edit-post', title='Edit Post')
+    return render_template(
+        'post_template.html',
+        post=post,
+        action='/post/process-edit-post',
+        title='Edit Post'
+    )
+
+# wok on process-edit-post not done!
+@app.route('/post/process-edit-post', methods=['POST'])
+def process_edit_post():
+    mongo_client = pymongo.MongoClient("localhost", 27017)
+    db = mongo_client.ezblog
+    db.posts.save({
+        'title': request.form['title'],
+        'content': request.form['content'],
+        '_id': ObjectId(request.form['_id'])
+    })
+    return redirect(url_for('default'))
 
 @app.route('/post/process-delete-post', methods=['POST'])
 def process_delete_post():
