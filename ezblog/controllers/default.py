@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for
 import pymongo
 from bson.objectid import ObjectId
+from ezblog import app
 import datetime
 
-app = Flask(__name__)
 
 @app.route('/')
 def default():
@@ -52,7 +52,6 @@ def edit_post(post_id):
         title='Edit Post'
     )
 
-# wok on process-edit-post not done!
 @app.route('/post/process-edit-post', methods=['POST'])
 def process_edit_post():
     mongo_client = pymongo.MongoClient("localhost", 27017)
@@ -70,6 +69,3 @@ def process_delete_post():
     db = mongo_client.ezblog
     db.posts.remove({'_id': ObjectId(request.form['_id'])})
     return redirect(url_for('default'))
-
-if __name__ == '__main__':
-    app.run(debug=True)
