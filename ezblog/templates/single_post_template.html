@@ -1,17 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{post['title']}}</title>
-</head>
-<body>
-    <div>
-        {{post['title']}}
+{% extends "layout.html" %}
+{% block title %} {{post['title']}} {% endblock %}
+{% block body %}
+    <div class="container">
+       <h1>{{post['title']}}</h1>
         {{post['content']}}
+        <p><a href="/post/edit/{{post['_id']}}">Edit</a></p>
     </div>
-
-    <div>
-        <a href="/post/edit/{{post['_id']}}">Edit</a>
-
-    </div>
-</body>
-</html>
+{% endblock %}

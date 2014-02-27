@@ -1,13 +1,19 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title></title>
-</head>
-<body>
-    {% for post in posts %}
-      <div>
-            <a href="/post/{{post['_id']}}">{{post['title']}}</a>
-      </div>
-    {% endfor %}
-</body>
-</html>
+{% extends "layout.html" %}
+{% block title %} EzBlog {% endblock %}
+{% block body %}
+    <div class="jumbotron">
+        <div class="container">
+            <h1>EZ Blog</h1>
+            <p>This is the ez blog!</p>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            {% for post in posts %}
+              <div class="col-md-4">
+                    <h2><a href="/post/{{post['_id']}}">{{post['title']}}</a></h2>
+              </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
