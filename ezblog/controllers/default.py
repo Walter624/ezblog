@@ -1,23 +1,22 @@
-from flask import Flask, render_template, request, redirect, url_for
-import pymongo
 from bson.objectid import ObjectId
+from flask import render_template, request, redirect, url_for
+import pymongo
+
 from ezblog import app
-import datetime
+from ezblog.models.blog import Post
 
 
 @app.route('/')
 def default():
     mongo_client = pymongo.MongoClient("localhost", 27017)
-    db = mongo_client.ezblog
-    posts = db.posts.find()
-    return render_template("default.html", posts=posts)
+    post_model = Post(mongo_client.ezblog)
+    return render_template("default.html", posts=post_model.get_all_posts())
 
 @app.route('/post/<post_id>')
 def single_post(post_id):
     mongo_client = pymongo.MongoClient("localhost", 27017)
-    db = mongo_client.ezblog
-    post = db.posts.find_one({'_id': ObjectId(post_id)})
-    return render_template('single_post_template.html', post=post)
+    post_model = Post(mongo_client.ezblog)
+    return render_template('single_post_template.html', post=post_model.get_single_post(post_id))
 
 @app.route('/post/create')
 def create_post():
@@ -36,18 +35,17 @@ def process_create_post():
         return render_template('post_template.html', error=errors)
 
     mongo_client = pymongo.MongoClient("localhost", 27017)
-    db = mongo_client.ezblog
-    db.posts.save({'title': request.form['title'], 'content': request.form['content']})
+    post_model = Post(mongo_client.ezblog)
+    post_model.save_post({'title': request.form['title'], 'content': request.form['content']})
     return redirect(url_for('default'))
 
 @app.route('/post/edit/<post_id>')
 def edit_post(post_id):
     mongo_client = pymongo.MongoClient("localhost", 27017)
-    db = mongo_client.ezblog
-    post = db.posts.find_one({'_id': ObjectId(post_id)})
+    post_model = Post(mongo_client.ezblog)
     return render_template(
         'post_template.html',
-        post=post,
+        post=post_model.get_single_post(post_id),
         action='/post/process-edit-post',
         title='Edit Post'
     )
@@ -55,8 +53,8 @@ def edit_post(post_id):
 @app.route('/post/process-edit-post', methods=['POST'])
 def process_edit_post():
     mongo_client = pymongo.MongoClient("localhost", 27017)
-    db = mongo_client.ezblog
-    db.posts.save({
+    post_model = Post(mongo_client.ezblog)
+    post_model.save_post({
         'title': request.form['title'],
         'content': request.form['content'],
         '_id': ObjectId(request.form['_id'])
@@ -66,6 +64,6 @@ def process_edit_post():
 @app.route('/post/process-delete-post', methods=['POST'])
 def process_delete_post():
     mongo_client = pymongo.MongoClient("localhost", 27017)
-    db = mongo_client.ezblog
-    db.posts.remove({'_id': ObjectId(request.form['_id'])})
+    post_model = Post(mongo_client.ezblog)
+    post_model.remove_post(request.form['_id'])
     return redirect(url_for('default'))
