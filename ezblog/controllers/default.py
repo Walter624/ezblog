@@ -20,7 +20,11 @@ def single_post(post_id):
 
 @app.route('/post/create')
 def create_post():
-    return render_template('post_template.html', action='/post/process-create-post', title='Create Post')
+    return render_template(
+        'post_template.html',
+        action='/post/process-create-post',
+        title='Create Post'
+    )
 
 @app.route('/post/process-create-post', methods=['POST'])
 def process_create_post():

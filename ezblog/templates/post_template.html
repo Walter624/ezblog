@@ -8,7 +8,8 @@
         {% endif %}
         <div class="form-group">
             <label for="title">Title:</label>
-            <input class="form-control" type="text" name="title" id="title" value="{{ post['title'] if post is defined else '' }}" />
+            <input class="form-control" type="text" name="title" id="title"
+                   value="{{ post['title'] if post is defined else '' }}" />
             {% if error is defined and error['title'] is defined %}
                 ERROR: {{error['title']}}
             {% endif %}
@@ -16,7 +17,8 @@
 
         <div class="form-group">
             <label for="content">Content:</label>
-            <textarea class="form-control" id="content" name="content">{{ post['content'] if post is defined else '' }}</textarea>
+            <textarea class="form-control" id="content"
+                      name="content">{{ post['content'] if post is defined else '' }}</textarea>
             {% if error is defined and error['content'] is defined %}
                 ERROR: {{error['content']}}
             {% endif %}
@@ -28,7 +30,8 @@
 
         {% if post is defined %}
             <div>
-                <button type="submit" class="btn btn-danger" formaction="/post/process-delete-post">Delete</button>
+                <button type="submit" class="btn btn-danger"
+                        formaction="/post/process-delete-post">Delete</button>
             </div>
         {% endif %}
 

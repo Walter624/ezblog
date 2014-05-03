@@ -1,19 +1,31 @@
 {% extends "layout.html" %}
 {% block title %} EzBlog {% endblock %}
 {% block body %}
-    <div class="jumbotron">
-        <div class="container">
-            <h1>EZ Blog</h1>
-            <p>This is the ez blog!</p>
-        </div>
-    </div>
+<div class="jumbotron">
     <div class="container">
         <div class="row">
-            {% for post in posts %}
-              <div class="col-md-4">
-                    <h2><a href="/post/{{post['_id']}}">{{post['title']}}</a></h2>
-              </div>
-            {% endfor %}
+            <div class="col-md-4">
+                <h1>EZ Blog</h1>
+                <p>This is the ez blog!</p>
+            </div>
+            <div class="col-md-6"> </div>
+            <div class="col-md-2">
+                <a href="/post/create">
+                    <button type="submit" class="btn btn-default">New Topic</button>
+                </a>
+            </div>
         </div>
     </div>
+
+</div>
+<div class="container">
+    <div class="row">
+        {% for post in posts %}
+        <div class="col-md-4">
+            <h2><a href="/post/{{post['_id']}}">{{post['title']}}</a></h2>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
 {% endblock %}
