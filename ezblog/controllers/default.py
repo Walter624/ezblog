@@ -1,21 +1,19 @@
 from bson.objectid import ObjectId
 from flask import render_template, request, redirect, url_for
-import pymongo
 
 from ezblog import app
+from ezblog.models import db
 from ezblog.models.blog import Post
 
 
 @app.route('/')
 def default():
-    mongo_client = pymongo.MongoClient("localhost", 27017)
-    post_model = Post(mongo_client.ezblog)
+    post_model = Post(db)
     return render_template("default.html", posts=post_model.get_all_posts())
 
 @app.route('/post/<post_id>')
 def single_post(post_id):
-    mongo_client = pymongo.MongoClient("localhost", 27017)
-    post_model = Post(mongo_client.ezblog)
+    post_model = Post(db)
     return render_template('single_post_template.html', post=post_model.get_single_post(post_id))
 
 @app.route('/post/create')
@@ -38,15 +36,13 @@ def process_create_post():
     if errors:
         return render_template('post_template.html', error=errors)
 
-    mongo_client = pymongo.MongoClient("localhost", 27017)
-    post_model = Post(mongo_client.ezblog)
+    post_model = Post(db)
     post_model.save_post({'title': request.form['title'], 'content': request.form['content']})
     return redirect(url_for('default'))
 
 @app.route('/post/edit/<post_id>')
 def edit_post(post_id):
-    mongo_client = pymongo.MongoClient("localhost", 27017)
-    post_model = Post(mongo_client.ezblog)
+    post_model = Post(db)
     return render_template(
         'post_template.html',
         post=post_model.get_single_post(post_id),
@@ -56,8 +52,7 @@ def edit_post(post_id):
 
 @app.route('/post/process-edit-post', methods=['POST'])
 def process_edit_post():
-    mongo_client = pymongo.MongoClient("localhost", 27017)
-    post_model = Post(mongo_client.ezblog)
+    post_model = Post(db)
     post_model.save_post({
         'title': request.form['title'],
         'content': request.form['content'],
@@ -67,7 +62,6 @@ def process_edit_post():
 
 @app.route('/post/process-delete-post', methods=['POST'])
 def process_delete_post():
-    mongo_client = pymongo.MongoClient("localhost", 27017)
-    post_model = Post(mongo_client.ezblog)
+    post_model = Post(db)
     post_model.remove_post(request.form['_id'])
     return redirect(url_for('default'))
